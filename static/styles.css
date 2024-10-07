@@ -1,32 +1,200 @@
+html {
+    background: #222;
+}
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
-    color: #212529;
+    overflow-x: hidden;
+    flex-wrap: wrap;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    overflow-y: hidden;
 }
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-top: 50px;
-    text-align: center;
-}
-h1 {
-    color: #007bff;
-}
-button {
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
     padding: 10px 20px;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #007bff;
+    height: 50px;
+}
+
+.header-left {
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.input-box {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    transition: width 0.3s ease;
+    width: 0px;
+    padding-right: 30px; /* Space for the icon */
+    border-radius: 5px;
+    background: #222;
+    color: white;
+}
+
+.input-box:focus {
+    outline: none;
+}
+
+#filterInput {
+    width: 100%;
+    box-sizing: border-box; /* Include padding in the width calculation */
+    padding: 10px;
+    margin-bottom: 20px; 
+    margin-top: 20px;
+    font-size: 1em;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
 }
-button:hover {
-    background-color: #0056b3;
+
+#filterInput:focus {
+    outline: none;
+}
+
+.expand-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+main {
+    padding: 20px;
+    height: 100vh;
+    max-width: 80%;
+    margin: auto;
+}
+
+.main-content {
+    display: flex;
+}
+
+.side-panel {
+    width: 400px; /* Adjust the width as needed */
+    min-width: 300px; /* Ensure the width doesn't go below 300px */
+    padding: 10px; /* Optional: for spacing */
+    overflow-y: auto; /* Allow scrolling */
+    max-height: 90vh; /* Limit height */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    height: 100vh;
+}
+
+.subheader {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.card3d {
+    margin: 4px;
+    transform: scale(1);
+    perspective: 300px;
+}
+
+.card3d:hover {
+    z-index: 10;
+    transform: scale(1.05);
+}
+
+.card3d,
+.card3d img {
+    transition: all 250ms ease-out;
+}
+
+.subheader {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%; /* Adjust the width as needed */
+    text-align: center;
+
+    p {
+        margin-top: 20px;
+        color: white;
+    }
+}
+
+.grid-container-2 {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: column;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.grid-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+
+    p {
+        margin-top: 10px;
+        color: white;
+        font-weight: bold;
+    }
+}
+
+.grid-item img {
+    max-width: 100%;
+    max-height: 100%;
+    height: 200px; /* Adjust this value to make the image bigger */
+    width: auto; /* Maintain aspect ratio */
+}
+
+#message {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+.hidden {
+    opacity: 0;
+}
+
+#checkboxList {
+    overflow-y: auto; /* Allow scrolling */
+    max-height: 75vh; /* Limit height */
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    label {
+        color: white;
+    }
+}
+.checkbox-container input {
+    margin-right: 10px;
 }
