@@ -40,19 +40,26 @@ function updateSelectedArtists() {
 // Function to filter and display the cards based on selected artists
 function filterCards() {
     const cardElements = document.querySelectorAll('.grid-item');
-    cardElements.forEach(cardElement => {
-        const artistNames = cardElement.getAttribute('data-artist').split(',').map(name => name.trim()); // Handle multiple artists
-        let displayCard = false;
+    if (selectedArtists.length === 0) {
+        // If no artists are selected, display all cards
+        cardElements.forEach(cardElement => {
+            cardElement.style.display = 'block';
+        });
+    } else {
+        cardElements.forEach(cardElement => {
+            const artistNames = cardElement.getAttribute('data-artist').split(',').map(name => name.trim()); // Handle multiple artists
+            let displayCard = false;
 
-        for (let artist of selectedArtists) {
-            if (artistNames.includes(artist)) {
-                displayCard = true;
-                break;
+            for (let artist of selectedArtists) {
+                if (artistNames.includes(artist)) {
+                    displayCard = true;
+                    break;
+                }
             }
-        }
 
-        cardElement.style.display = displayCard ? 'block' : 'none';
-    });
+            cardElement.style.display = displayCard ? 'block' : 'none';
+        });
+    }
 }
 
 // Ensure the script runs after the DOM is fully loaded
