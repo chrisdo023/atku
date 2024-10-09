@@ -1,27 +1,77 @@
-let currentPage = 0;
-const itemsPerPage = 12;
+
+const modal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+const closeModal = document.getElementsByClassName('close')[0];
+
+function clearInput() {
+    document.getElementById('filterInput').value = '';
+    renderOptions('');
+    updateSelectedArtists();
+}
 
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function filterCards() {
-    const selectedArtists = Array.from(document.querySelectorAll('.artist-checkbox:checked'))
+let selectedArtists = [];
+
+// Function to update the selectedArtists array based on checked checkboxes
+function updateSelectedArtists() {
+    const checkedArtists = Array.from(document.querySelectorAll('.artist-checkbox:checked'))
         .map(cb => {
             const label = document.querySelector(`label[for="${cb.id}"]`);
-            return label.innerText;
+            return label.innerText.trim(); // Trim to remove any extra spaces
         });
 
-    const cardElements = document.querySelectorAll('.grid-item');
-    cardElements.forEach(cardElement => {
-        const artistName = cardElement.getAttribute('data-artist');
-        if (selectedArtists.length === 0 || selectedArtists.includes(artistName)) {
-            cardElement.style.display = 'flex';
-        } else {
-            cardElement.style.display = 'none';
+    // Remove unchecked artists from the selectedArtists array
+    selectedArtists = selectedArtists.filter(artist => checkedArtists.includes(artist));
+
+    // Add newly checked artists to the selectedArtists array
+    checkedArtists.forEach(artist => {
+        if (!selectedArtists.includes(artist)) {
+            selectedArtists.push(artist);
         }
     });
+
+    // Filter and display the cards based on selected artists
+    filterCards();
 }
+
+// Function to filter and display the cards based on selected artists
+function filterCards() {
+    const cardElements = document.querySelectorAll('.grid-item');
+    cardElements.forEach(cardElement => {
+        const artistNames = cardElement.getAttribute('data-artist').split(',').map(name => name.trim()); // Handle multiple artists
+        let displayCard = false;
+
+        for (let artist of selectedArtists) {
+            if (artistNames.includes(artist)) {
+                displayCard = true;
+                break;
+            }
+        }
+
+        cardElement.style.display = displayCard ? 'block' : 'none';
+    });
+}
+
+// Ensure the script runs after the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Add event listeners to existing checkboxes
+    document.querySelectorAll('.artist-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedArtists);
+    });
+
+    // Initial call to updateSelectedArtists to set the initial state
+    updateSelectedArtists();
+
+    // Add event listener to the filter input
+    const filterInput = document.getElementById('filterInput');
+    filterInput.addEventListener('input', debounce(function() {
+        const filter = this.value.toLowerCase();
+        renderOptions(filter);
+    }, 300));
+});
 
 async function fetchCardImage(scryfallId) {
     await delay(50); // Add a delay of 50 milliseconds
@@ -48,7 +98,10 @@ document.getElementById('user_input').addEventListener('keydown', function(event
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    console.log(data.error);
+                    document.getElementById('message').innerText = 'Uh oh, something went wrong :(';
+                    setTimeout(() => {
+                        document.getElementById('message').innerText = 'Start by searching your Moxfield deck in the top left corner.';
+                    }, 1500); // Match this duration with the CSS transition duration
                 } else {
                     document.getElementById('message').innerText = '';
                     const mainboardContainer = document.getElementById('mainboard_container');
@@ -58,9 +111,8 @@ document.getElementById('user_input').addEventListener('keydown', function(event
                     // Clear the input box
                     document.getElementById('user_input').value = '';
 
+                    // Add cards found within mainboard
                     const mainboard = data.mainboard;
-                    console.log(mainboard);
-
                     for (const card in mainboard) {
                         if (mainboard.hasOwnProperty(card)) {
                             const cardDetails = mainboard[card].card;
@@ -68,15 +120,27 @@ document.getElementById('user_input').addEventListener('keydown', function(event
                             fetchCardImage(cardDetails.scryfall_id)
                                 .then(cardArt => {
                                     const gridItem = document.createElement('div');
-                                    gridItem.className = 'grid-item';
+                                    gridItem.classList.add('grid-item');
+                                    gridItem.classList.add('card3d');
                                     gridItem.setAttribute('data-artist', cardDetails.artist);
-
-                                    gridItem.innerHTML = `
-                                        <div class="card3d">
-                                        <img src="${cardArt}" alt="${cardName}">
-                                        </div>
-                                    `;
+                                
+                                    const imgElement = document.createElement('img');
+                                    imgElement.src = cardArt;
+                                    imgElement.alt = cardName;
+                                
+                                    const titleElement = document.createElement('div');
+                                    titleElement.classList.add('title');
+                                    titleElement.textContent = cardName;
+                                
+                                    gridItem.appendChild(imgElement);
+                                    gridItem.appendChild(titleElement);
                                     mainboardContainer.appendChild(gridItem);
+
+                                    // Add click event to open modal
+                                    gridItem.addEventListener('click', () => {
+                                        modal.style.display = 'flex';
+                                        modalImage.src = cardArt;
+                                    });
                                 })
                                 .catch(error => {
                                     console.error('Error fetching card image:', error);
@@ -7541,6 +7605,11 @@ function renderOptions(filter = '') {
     });
     checkboxList.innerHTML = '';
     checkboxList.appendChild(fragment);
+
+    // Add event listeners to checkboxes
+    document.querySelectorAll('.artist-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedArtists);
+    });
 }
 
 function debounce(func, wait) {
@@ -7564,6 +7633,14 @@ filterInput.addEventListener('input', debounce(function() {
 // Initial render
 renderOptions();
 
-document.querySelectorAll('.artist-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', filterCards);
-});
+// Close the modal when the user clicks on <span> (x)
+closeModal.onclick = function() {
+    modal.style.display = 'none';
+}
+
+// Close the modal when the user clicks anywhere outside of the modal
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}

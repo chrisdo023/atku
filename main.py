@@ -30,8 +30,12 @@ def extract_deck_content(deck_id):
         # Convert the response to JSON
         data = json.loads(html.decode('utf-8'))
 
-        # Parse mainboard from data
+        # Parse mainboard and commanders from data
         mainboard = data["mainboard"]
+        commanders = data["commanders"]
+
+        # Append commanders content to mainboard
+        mainboard.update(commanders)
 
         return mainboard
         # for card in mainboard:
