@@ -34,11 +34,6 @@ header {
     align-items: center;
 }
 
-.input-container {
-    position: relative;
-    display: inline-block;
-}
-
 .input-box {
     padding: 10px;
     font-size: 1em;
@@ -57,6 +52,7 @@ header {
 
 .input-container {
     position: relative;
+    display: inline-block;
     width: 100%
 }
 .input-container input {
@@ -77,6 +73,22 @@ header {
 
 .clear-btn:hover {
     color: red;
+}
+
+.clear-results-btn {
+    margin-top: 20px;
+    background-color: #FFD43B;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    transition: 0.25s;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.clear-results-btn:hover {
+    background-color: #dcb731;    
 }
 
 #filterInput {
@@ -116,13 +128,13 @@ main {
 }
 
 .side-panel {
-    width: 400px; /* Adjust the width as needed */
-    min-width: 300px; /* Ensure the width doesn't go below 300px */
+    min-width: 400px; /* Ensure the width doesn't go below 300px */
     padding: 10px; /* Optional: for spacing */
     overflow-y: auto; /* Allow scrolling */
     max-height: 90vh; /* Limit height */
     box-sizing: border-box; /* Include padding in the width calculation */
     height: 100vh;
+    margin-right: 30px;
 }
 
 .subheader {
@@ -138,7 +150,7 @@ main {
 
 .card3d:hover {
     z-index: 10;
-    transform: scale(1.10);
+    transform: scale(1.05);
 }
 
 .card3d,

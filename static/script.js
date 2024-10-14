@@ -9,6 +9,15 @@ function clearInput() {
     updateSelectedArtists();
 }
 
+function clearResults() { 
+    let checkboxes = document.querySelectorAll('.artist-checkbox'); 
+    checkboxes.forEach((checkbox) => { 
+        checkbox.checked = false; 
+    }); 
+    // document.getElementById('filterInput').value = '';
+    updateSelectedArtists();
+} 
+
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -24,7 +33,9 @@ function updateSelectedArtists() {
         });
 
     // Remove unchecked artists from the selectedArtists array
+    console.log("selected artists: ", selectedArtists);
     selectedArtists = selectedArtists.filter(artist => checkedArtists.includes(artist));
+    console.log("selected artists: ", selectedArtists);
 
     // Add newly checked artists to the selectedArtists array
     checkedArtists.forEach(artist => {
@@ -73,11 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSelectedArtists();
 
     // Add event listener to the filter input
-    const filterInput = document.getElementById('filterInput');
-    filterInput.addEventListener('input', debounce(function() {
-        const filter = this.value.toLowerCase();
-        renderOptions(filter);
-    }, 300));
+    // const filterInput = document.getElementById('filterInput');
+    // filterInput.addEventListener('input', debounce(function() {
+    //     const filter = this.value.toLowerCase();
+    //     renderOptions(filter);
+    // }, 300));
 });
 
 async function fetchCardImage(scryfallId) {
@@ -7627,15 +7638,15 @@ function debounce(func, wait) {
     };
 }
 
-const filterInput = document.getElementById('filterInput');
-filterInput.addEventListener('input', debounce(function() {
-    const filter = this.value.toLowerCase();
-    renderOptions(filter);
+// const filterInput = document.getElementById('filterInput');
+// filterInput.addEventListener('input', debounce(function() {
+//     const filter = this.value.toLowerCase();
+//     renderOptions(filter);
     
-    document.querySelectorAll('.artist-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', filterCards);
-    });
-}, 300));
+//     document.querySelectorAll('.artist-checkbox').forEach(checkbox => {
+//         checkbox.addEventListener('change', filterCards);
+//     });
+// }, 300));
 
 // Initial render
 renderOptions();
