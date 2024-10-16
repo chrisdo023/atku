@@ -33,9 +33,9 @@ function updateSelectedArtists() {
         });
 
     // Remove unchecked artists from the selectedArtists array
-    console.log("selected artists: ", selectedArtists);
+    // console.log("selected artists: ", selectedArtists);
     selectedArtists = selectedArtists.filter(artist => checkedArtists.includes(artist));
-    console.log("selected artists: ", selectedArtists);
+    // console.log("selected artists: ", selectedArtists);
 
     // Add newly checked artists to the selectedArtists array
     checkedArtists.forEach(artist => {
